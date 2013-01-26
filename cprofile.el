@@ -49,7 +49,4 @@
 (defun cprofile-sort-time (stats)
   (pymacs-call "cProfile_emacs.EmacsStats.sort" stats "time"))
 
-(cprofile-init)
-(cprofile-create-stats-buffer "/home/ghamon/log")
-
 
