@@ -20,6 +20,8 @@
           #'(lambda () (interactive) (cprofile-display-cumulative buf stats)))
         (define-key map "t" 
           #'(lambda () (interactive) (cprofile-display-time buf stats)))
+        (define-key map "q"
+          #'(lambda () (interactive) (kill-buffer buf)))
         (use-local-map map)
         (hl-line-mode 1)
         (cprofile-display-stats buf stats)))))
