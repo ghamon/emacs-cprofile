@@ -55,3 +55,7 @@
 (defun cprofile-load-file (file)
   (interactive "f")
   (cprofile-create-stats-buffer file))
+
+(cprofile-init)
+
+(provide 'cprofile)
