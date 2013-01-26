@@ -33,7 +33,8 @@
         (insert (pymacs-call "cProfile_emacs.EmacsStats.display" stats nline))
         (goto-char (point-min))
         (beginning-of-line 9)
-        (setq buffer-read-only 1)))))
+        (setq buffer-read-only 1)
+        (set-window-buffer nil buffer)))))
 
 (defun cprofile-display-cumulative (buffer stats)
   (cprofile-sort-cumulative stats)
@@ -49,4 +50,6 @@
 (defun cprofile-sort-time (stats)
   (pymacs-call "cProfile_emacs.EmacsStats.sort" stats "time"))
 
-
+(defun cprofile-load-file (file)
+  (interactive "f")
+  (cprofile-create-stats-buffer file))
