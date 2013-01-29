@@ -20,6 +20,10 @@
           #'(lambda () (interactive) (cprofile-display-cumulative buf stats)))
         (define-key map "t" 
           #'(lambda () (interactive) (cprofile-display-time buf stats)))
+        (define-key map (kbd "<return>")
+          #'(lambda () (interactive) (cprofile-display-callees buf stats)))
+        (define-key map (kbd "<backspace>")
+          #'(lambda () (interactive) (cprofile-display-callers buf stats)))
         (define-key map "q"
           #'(lambda () (interactive) (kill-buffer buf)))
         (use-local-map map)
@@ -55,6 +59,40 @@
 (defun cprofile-load-file (file)
   (interactive "f")
   (cprofile-create-stats-buffer file))
+
+(defun cprofile-display-callees (buffer stats)
+  (let* ((elems (split-string (thing-at-point 'line)))
+         (nelems (length elems))
+         (f (car (split-string (nth (- nelems 1) elems) "("))))
+    (with-current-buffer buffer
+      (let ((nline (- (window-body-height) 12)))
+        (progn
+          (setq buffer-read-only nil)
+          (erase-buffer)
+          (insert (pymacs-call 
+                   "cProfile_emacs.EmacsStats.displayCallees" 
+                   stats nline f))
+          (goto-char (point-min))
+          (beginning-of-line 9)
+          (setq buffer-read-only 1)
+          (set-window-buffer nil buffer))))))
+
+(defun cprofile-display-callers (buffer stats)
+  (let* ((elems (split-string (thing-at-point 'line)))
+         (nelems (length elems))
+         (f (car (split-string (nth (- nelems 1) elems) "("))))
+    (with-current-buffer buffer
+      (let ((nline (- (window-body-height) 12)))
+        (progn
+          (setq buffer-read-only nil)
+          (erase-buffer)
+          (insert (pymacs-call 
+                   "cProfile_emacs.EmacsStats.displayCallers" 
+                   stats nline f))
+          (goto-char (point-min))
+          (beginning-of-line 9)
+          (setq buffer-read-only 1)
+          (set-window-buffer nil buffer))))))
 
 (cprofile-init)
 

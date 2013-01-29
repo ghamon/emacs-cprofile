@@ -31,3 +31,14 @@ class EmacsStats(object):
         self._stdout.truncate(0)
         self._stats.print_stats(number_items)
         return self._stdout.getvalue()
+
+    def displayCallees(self, number_items, f):
+        self._stdout.truncate(0)
+        self._stats.print_callees(f, number_items)
+        return self._stdout.getvalue()
+
+    def displayCallers(self, number_items, f):
+        self._stdout.truncate(0)
+        self._stats.print_callers(f, number_items)
+        return self._stdout.getvalue()
+    
