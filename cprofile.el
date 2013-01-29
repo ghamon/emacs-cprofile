@@ -26,6 +26,7 @@
           #'(lambda () (interactive) (cprofile-display-callers buf stats)))
         (define-key map "q"
           #'(lambda () (interactive) (kill-buffer buf)))
+        (cprofile-mode)
         (use-local-map map)
         (hl-line-mode 1)
         (cprofile-display-stats buf stats)))))
@@ -35,6 +36,7 @@
     (let ((nline (- (window-body-height) 12)))
       (progn
         (setq buffer-read-only nil)
+        (setq truncate-lines 1)
         (erase-buffer)
         (insert (pymacs-call "cProfile_emacs.EmacsStats.display" stats nline))
         (goto-char (point-min))
@@ -93,6 +95,23 @@
           (beginning-of-line 9)
           (setq buffer-read-only 1)
           (set-window-buffer nil buffer))))))
+
+(require 'generic-x)
+
+(define-generic-mode 
+    'cprofile-mode
+    nil
+    '("internal time" "cumulative time") ;; kwd
+    '(("ncalls" . 'font-lock-type-face)
+      ("tottime" . 'font-lock-type-face)
+      ("cumtime" . 'font-lock-type-face)
+      ("percall" . 'font-lock-type-face)
+      ("filename:lineno(function)" . 'font-lock-type-face)
+      (":" . 'font-lock-builtin-face))
+    nil
+    nil
+    "A mode for cprofile output files"
+    )
 
 (cprofile-init)
 
